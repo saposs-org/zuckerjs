@@ -1,0 +1,29 @@
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
+</head>
+<body>
+    <zucker></zucker>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="../../zucker.js"></script>
+    <script>
+        window.zucker.config(['todo.config.service', 'todo.controller.service', 'todo.layout.view', 'todo.view'])
+            .setEntryPointArgs(angular)
+            .execute()
+            .after(function () {
+                angular.element(document).injector().invoke(function($compile){
+                    var scope = angular.element($('body')).scope();
+                    $compile($('body'))(scope);
+                    scope.$apply(); 
+                });
+            });
+    </script>
+</body>
+</html>
