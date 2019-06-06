@@ -113,7 +113,7 @@
                             obj.templates.push(data);
                         }
                         if (i === comps.length - 1) {
-                            if (win.zucker.entryPointService)
+                            if (win.zucker.entryPointService.execute)
                                 win.zucker.entryPointService.execute(win.zucker.options.entryPointArgs);
                             if (win.zucker.options.isCacheEnabled && win.localStorage)
                                 win.localStorage.setItem('zucker', JSON.stringify(obj));
@@ -135,7 +135,7 @@
                     win.zucker.defaultView = eval(objCache.defaultView);
                     win.zucker.entryPointService = eval(objCache.entryPointService);
                     
-                    if (win.zucker.entryPointService)
+                    if (win.zucker.entryPointService.execute)
                         win.zucker.entryPointService.execute(win.zucker.options.entryPointArgs);
                     win.zucker.services.push(win.zucker.entryPointService);
                     win.zucker.core.run();

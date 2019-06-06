@@ -1,7 +1,9 @@
 describe('Testing zucker', () => {
 
     beforeAll(function () {
-        window.zucker.config(['test.view', 'test.handler', 'test.service']).execute();
+        window.zucker.config(['test.view', 'test.handler', 'test.service']).before(function () {
+            window.zucker.options.isCacheEnabled = false;
+        }).execute();
     });
 
     it('test total count of components', function (done) {
