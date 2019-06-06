@@ -1,13 +1,13 @@
 (function (win) {
     return {
-        name: 'saposs.pear.aboutusview',
+        name: 'simple.about-us.view',
         version: 'v1.0.0',
-        templateName: 'saposs.pear.master',
+        templateName: 'simple.layout.view',
         route: 'about-us',
         isDefault: false,
         type: 'view',
         get: function (callback) {
-            win.zucker.utils.getView('saposs.pear.aboutusview.htm', function (data) {
+            win.zucker.utils.getView('simple.about-us.view.htm', function (data) {
                 callback(data);
             });
         }

@@ -14,15 +14,15 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="../../zucker.js"></script>
     <script>
-        window.zucker.config(['todo.config.service', 'todo.controller.service', 'todo.layout.view', 'todo.view'])
+        window.zucker.setAppName('todo').config(['todo.config.service', 'todo.controller.service', 'todo.layout.view', 'todo.view'])
             .setEntryPointArgs(angular)
             .before(function () {
                 window.zucker.options.isCacheEnabled = true;
             })
-            .execute()
             .after(function () {
                  angular.bootstrap(document.getElementById('app'), ['todo-app']);
-            });
+            })
+            .execute();
     </script>
 </body>
 </html>

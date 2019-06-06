@@ -1,6 +1,6 @@
 (function () {
     return {
-        name: 'saposs.pear.homeservice',
+        name: 'simple.home.service',
         version: 'v1.0.0',
         route: '/',
         type: 'service',

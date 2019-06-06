@@ -67,14 +67,16 @@
             }
         },
         defaultView: {},
-        entryPointService: {},
+        entryPointService: {
+            execute: function () {}
+        },
         views: [],
         templates: [],
         handlers: [],
         services: [],
         core: {
             install: function () {
-                var zuckerCache = win.zucker.options.isCacheEnabled && win.localStorage ? win.localStorage.getItem('zucker') : undefined;
+                var zuckerCache = win.zucker.options.isCacheEnabled && win.localStorage ? win.localStorage.getItem(win.zucker.options.appName + '_zucker') : undefined;
                 if (!zuckerCache) {
                     var comps = win.zucker.options.components;
                     if (comps.length === 0) return;
@@ -113,10 +115,10 @@
                             obj.templates.push(data);
                         }
                         if (i === comps.length - 1) {
-                            if (win.zucker.entryPointService.execute)
+                            if (win.zucker.entryPointService)
                                 win.zucker.entryPointService.execute(win.zucker.options.entryPointArgs);
                             if (win.zucker.options.isCacheEnabled && win.localStorage)
-                                win.localStorage.setItem('zucker', JSON.stringify(obj));
+                                win.localStorage.setItem(win.zucker.options.appName + '_zucker', JSON.stringify(obj));
                             win.zucker.core.run();
                         } else {
                             win.zucker.utils.ajax(win.zucker.utils.getComponentUrl(comps[i + 1] + '.js'), parseComponent, i + 1);
@@ -134,10 +136,10 @@
                     }
                     win.zucker.defaultView = eval(objCache.defaultView);
                     win.zucker.entryPointService = eval(objCache.entryPointService);
-                    
-                    if (win.zucker.entryPointService.execute)
+                    if (win.zucker.entryPointService && win.zucker.entryPointService.name) {
                         win.zucker.entryPointService.execute(win.zucker.options.entryPointArgs);
-                    win.zucker.services.push(win.zucker.entryPointService);
+                        win.zucker.services.push(win.zucker.entryPointService);
+                    }
                     win.zucker.core.run();
                 }
             },
@@ -149,7 +151,7 @@
                 if (!hash || hash === '' || hash === '/') {
                     hash = '/';
                 } else hash = win.location.hash;
-                var zuckerHash = win.zucker.options.isCacheEnabled && win.localStorage ? win.localStorage.getItem('zucker' + hash) : undefined;
+                var zuckerHash = win.zucker.options.isCacheEnabled && win.localStorage ? win.localStorage.getItem(win.zucker.options.appName + '_zucker' + hash) : undefined;
                 var loadHandlers = function (hash) {
                     for (i = 0; i < win.zucker.handlers.length; i++) {
                         if (win.zucker.handlers[i].route === hash) {
@@ -172,10 +174,10 @@
                                 (win.document.getElementsByTagName(_part)[0]).outerHTML = win.document.getElementById(_part).innerHTML;
                                 win.document.getElementById(_part).outerHTML = '';
                             }
-                            win.localStorage.setItem('zucker' + hash, rootEle.innerHTML);
+                            win.localStorage.setItem(win.zucker.options.appName + '_zucker' + hash, rootEle.innerHTML);
                             rootEle.outerHTML = rootEle.innerHTML;
                         } else {
-                            win.localStorage.setItem('zucker' + hash, data);
+                            win.localStorage.setItem(win.zucker.options.appName + '_zucker' + hash, data);
                             rootEle.outerHTML = data;
                         }
                         loadHandlers(hash);
@@ -232,6 +234,7 @@
             }
         },
         options: {
+            appName: 'zucker',
             componentFolder: 'archives',
             base: 'base',
             selectedProjectIndex: 0,
@@ -251,6 +254,10 @@
         after: function (afterLoaded) {
             win.zucker.options.afterLoaded = afterLoaded;
             return win.zucker;
+        },
+        setAppName: function (appName) {
+            win.zucker.options.appName = appName;
+            return win.zucker; 
         },
         setEntryPointArgs: function (params) {
             win.zucker.options.entryPointArgs = params;

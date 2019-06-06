@@ -1,13 +1,13 @@
 (function (win) {
     return {
-        name: 'saposs.pear.homeview',
+        name: 'simple.home.view',
         version: 'v1.0.0',
-        templateName: 'saposs.pear.master',
+        templateName: 'simple.layout.view',
         route: '/',
         isDefault: true,
         type: 'view',
         get: function (callback) {
-            win.zucker.utils.getView('saposs.pear.homeview.htm', function (data) {
+            win.zucker.utils.getView('simple.home.view.htm', function (data) {
                 callback(data);
             });
         }

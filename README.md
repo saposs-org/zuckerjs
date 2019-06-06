@@ -1,14 +1,18 @@
-# Saposs ZuckerJS
-ZuckerJS is a simple JavaScript library which was given birth to assist any web developer to build any SPA web application by component-oriented architecture. It's free, fast and efficient and no required
-dependencies.
+# ZuckerJS
 
-This term "component-oriented architecture" can be understood as a set of all uncoupled components to form an application.
-It sounds cool :), right? Your development tasks are only: write any component and then add them to ZuckerJS configurations
-as below.
+ZuckerJS is a simple JavaScript library which was given birth to assist any web developer to build any SPA web application by component-oriented architecture(view, handler and service components). It's free, fast, efficient and no required dependencies.
 
-# Install and Usage
+Basically, ZuckerJS relies on some configurations from you to specify what components will be loaded. All of them will be done into memory. When user requests a page, ZuckerJS will get location's hash of current window to specify what page will be loaded(in theory). In practice, all components, that have that same route/hash, will be executed to render page dynamically.
+
+In order to add a new page, you only need to write some components with new same route and then add them into Zucker configuration.
+
+NOTE: this term "component-oriented architecture" can be understood as a set of all uncoupled components to form an application.
+
+## Install and Usage
+
 It's simple to install and use ZuckerJS, only in 3 following steps:
-- Download ZuckerJS library "zucker.js" from source.
+
+- Download ZuckerJS library "zucker.min.js" from source.
 - Include it at the end of body tag.
 - Configure ZuckerJS for application:
 
@@ -18,24 +22,36 @@ It's simple to install and use ZuckerJS, only in 3 following steps:
     </script>
 ```
 
-# How does ZuckerJS work?
-Basically, ZuckerJS took advantage of browser's hash to route as well as connect all relevant components 
-that have the same route.
+## Samples
 
-For instance:
-In SPA, each page own a route, view and business logics. View and business logics
-are components that have the same route.
+You can find two samples from source: simple and todo(played with AngularJS).
 
-# Why using ZuckerJS?
+## Benefits
+
+- Simple, fast and efficient.
 - Component-oriented architecture.
 - SPA + cache.
-- Simple, fast and efficient.
 - Multiple layouts.
+- Easy to test.
 - Replace any component easily.
+- Mark version easily.
 
-If you want some of them, ZuckerJS will be a right decision for you.
+If you want some of them, ZuckerJS will be a right decision for you to work on.
 
-# Browser Compatibility
+## Play with third-party libraries
+
+ZuckerJS can play with all third-party libraries well. Some of them are:
+
+- jQuery.
+- AngularJS.
+- VueJS.
+- EmberJS.
+- KnockoutJS.
+
+and so on.
+
+## Browser Compatibility
+
 - Google Chrome.
 - Firefox.
 - Edge & Edge Dev.
@@ -43,5 +59,10 @@ If you want some of them, ZuckerJS will be a right decision for you.
 - Safari.
 - IE 8+.
 
-# Copyright & License
+## Contributions
+
+We're very glad to receive any contribution from you to make ZuckerJS better and developer-friendly.
+
+## Copyright & License
+
 &copy;Copyright 2019 by Saposs - MIT License
