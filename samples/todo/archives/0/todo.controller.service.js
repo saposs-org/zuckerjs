@@ -9,7 +9,7 @@
             if (app) {
                 app.controller('todo-controller', function ($scope) {
                     $scope.task = '';
-                    $scope.items = ['abc', 'cde'];
+                    $scope.items = ['4', '3', '34'];
         
                     $scope.add = function () {
                         if ($scope.task.length > 0) {

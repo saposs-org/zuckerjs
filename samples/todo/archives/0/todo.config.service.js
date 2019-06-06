@@ -8,7 +8,6 @@
         execute: function (ng) {
             var app = ng.module('todo-app', []);
             win.zucker.utils.executeServicesByCurrentRoute(app);
-            ng.bootstrap(document, ['todo-app']);
             return app;
         }
     };

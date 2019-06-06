@@ -1,10 +1,10 @@
 <script id="content" type="text/template">
-<div class="mt-3 ml-3" ng-controller="todo-controller">
-    <h3>TODO Application</h3>
-    <input type="text" ng-model="task">
-    <button class="btn btn-primary" ng-click="add()">Add</button>
-    <ul>
-        <li ng-repeat="item in items">{{ item }} <a href="#" ng-click="remove(item)">Delete</a></li>
-    </ul>
-</div>
+    <div class="mt-3 ml-3" ng-controller="todo-controller">
+        <h3>TODO Application</h3>
+        <input type="text" ng-model="task">
+        <button class="btn btn-primary" ng-click="add()">Add</button>
+        <ul>
+            <li ng-repeat="item in items track by $index">{{ item }} <a href="#" ng-click="remove(item)">Delete</a></li>
+        </ul>
+    </div>
 </script>

@@ -16,13 +16,12 @@
     <script>
         window.zucker.config(['todo.config.service', 'todo.controller.service', 'todo.layout.view', 'todo.view'])
             .setEntryPointArgs(angular)
+            .before(function () {
+                window.zucker.options.isCacheEnabled = true;
+            })
             .execute()
             .after(function () {
-                angular.element(document).injector().invoke(function($compile){
-                    var scope = angular.element($('body')).scope();
-                    $compile($('body'))(scope);
-                    scope.$apply(); 
-                });
+                 angular.bootstrap(document.getElementById('app'), ['todo-app']);
             });
     </script>
 </body>

@@ -67,7 +67,6 @@
             }
         },
         defaultView: {},
-        defaultTemplate: {},
         entryPointService: {},
         views: [],
         templates: [],
@@ -75,35 +74,72 @@
         services: [],
         core: {
             install: function () {
-                var comps = win.zucker.options.components;
-                if (comps.length === 0) return;
-                var parseComponent = function (data, i) {
-                    var comp = eval(data);
-                    if (comp.type === 'view') {
-                        if (comp.isDefault) {
-                            win.zucker.defaultView = comp;
+                var zuckerCache = win.zucker.options.isCacheEnabled && win.localStorage ? win.localStorage.getItem('zucker') : undefined;
+                if (!zuckerCache) {
+                    var comps = win.zucker.options.components;
+                    if (comps.length === 0) return;
+                    var obj = {
+                        views: [],
+                        handlers: [],
+                        services: [],
+                        templates: [],
+                        defaultView: '',
+                        entryPointService: ''
+                    };
+                    var parseComponent = function (data, i) {
+                        var comp = eval(data);
+                        if (comp.type === 'view') {
+                            if (comp.isDefault) {
+                                win.zucker.defaultView = comp;
+                                obj.defaultView = data;
+                            }
+                            win.zucker.views.push(comp);
+                            obj.views.push(data);
+                        } else if (comp.type === 'handler') {
+                            win.zucker.handlers.push(comp);
+                            obj.handlers.push(data);
+                        } else if (comp.type === 'service') {
+                            if (comp.isEntryPoint) {
+                                win.zucker.entryPointService = comp;
+                                if (win.zucker.options.isCacheEnabled)
+                                    obj.entryPointService = data;
+                            } else {
+                                if (win.zucker.options.isCacheEnabled)
+                                    obj.services.push(data);
+                            }
+                            win.zucker.services.push(comp);
+                        } else if (comp.type === 'template') {
+                            win.zucker.templates.push(comp);
+                            obj.templates.push(data);
                         }
-                        win.zucker.views.push(comp);
-                    } else if (comp.type === 'handler') {
-                        win.zucker.handlers.push(comp);
-                    } else if (comp.type === 'service') {
-                        if (comp.isEntryPoint) {
-                            win.zucker.entryPointService = comp;
+                        if (i === comps.length - 1) {
+                            if (win.zucker.entryPointService)
+                                win.zucker.entryPointService.execute(win.zucker.options.entryPointArgs);
+                            if (win.zucker.options.isCacheEnabled && win.localStorage)
+                                win.localStorage.setItem('zucker', JSON.stringify(obj));
+                            win.zucker.core.run();
+                        } else {
+                            win.zucker.utils.ajax(win.zucker.utils.getComponentUrl(comps[i + 1] + '.js'), parseComponent, i + 1);
                         }
-                        win.zucker.services.push(comp);
-                    } else if (comp.type === 'template') {
-                        win.zucker.templates.push(comp);
-                    }
-                    if (i === comps.length - 1) {
-                        if (win.zucker.entryPointService.execute)
-                            win.zucker.entryPointService.execute(win.zucker.options.entryPointArgs);
-                        win.zucker.core.run();
-                    } else {
-                        win.zucker.utils.ajax(win.zucker.utils.getComponentUrl(comps[i + 1] + '.js'), parseComponent, i + 1);
-                    }
-                };
+                    };
 
-                win.zucker.utils.ajax(win.zucker.utils.getComponentUrl(comps[0] + '.js'), parseComponent, 0);
+                    win.zucker.utils.ajax(win.zucker.utils.getComponentUrl(comps[0] + '.js'), parseComponent, 0);
+                } else {
+                    var objCache = JSON.parse(zuckerCache);
+                    var types = ['views', 'handlers', 'services', 'templates'];
+                    for (var i = 0; i < types.length; i++) {
+                        for (var j = 0; j < objCache[types[i]].length; j++) {
+                            win.zucker[types[i]].push(eval(objCache[types[i]][j]));
+                        }
+                    }
+                    win.zucker.defaultView = eval(objCache.defaultView);
+                    win.zucker.entryPointService = eval(objCache.entryPointService);
+                    
+                    if (win.zucker.entryPointService)
+                        win.zucker.entryPointService.execute(win.zucker.options.entryPointArgs);
+                    win.zucker.services.push(win.zucker.entryPointService);
+                    win.zucker.core.run();
+                }
             },
             run: function () {
                 var rootEle = win.document.getElementsByTagName(win.zucker.options.rootElementName)[0];
@@ -113,6 +149,7 @@
                 if (!hash || hash === '' || hash === '/') {
                     hash = '/';
                 } else hash = win.location.hash;
+                var zuckerHash = win.zucker.options.isCacheEnabled && win.localStorage ? win.localStorage.getItem('zucker' + hash) : undefined;
                 var loadHandlers = function (hash) {
                     for (i = 0; i < win.zucker.handlers.length; i++) {
                         if (win.zucker.handlers[i].route === hash) {
@@ -120,16 +157,26 @@
                         }
                     }
                 };
+                if (zuckerHash) {
+                    rootEle.outerHTML = zuckerHash;
+                    loadHandlers(hash);
+                    win.zucker.options.afterLoaded();
+                    return;
+                }
                 var loadView = function () {
                     var afterGetView = function (data) {
                         if (tmplIndex >= 0) {
                             rootEle.innerHTML = win.zucker.templates[tmplIndex].content + ' ' + data;
                             for (i = 0; i < win.zucker.templates[tmplIndex].parts.length; i++) {
                                 var _part = win.zucker.templates[tmplIndex].parts[i];
-                                (win.document.getElementsByTagName(_part)[0]).innerHTML = win.document.getElementById(_part).innerHTML
+                                (win.document.getElementsByTagName(_part)[0]).outerHTML = win.document.getElementById(_part).innerHTML;
+                                win.document.getElementById(_part).outerHTML = '';
                             }
+                            win.localStorage.setItem('zucker' + hash, rootEle.innerHTML);
+                            rootEle.outerHTML = rootEle.innerHTML;
                         } else {
-                            rootEle.innerHTML = data;
+                            win.localStorage.setItem('zucker' + hash, data);
+                            rootEle.outerHTML = data;
                         }
                         loadHandlers(hash);
                         win.zucker.options.afterLoaded();
@@ -170,17 +217,29 @@
                     loadTemplate(data, 0);
                 });
             },
+            check: function () {
+                if (!win.localStorage)  {
+                    console.log(win.zucker.options.messages[win.zucker.options.locale].localStorageErrorMsg);
+                    return false;
+                }
+                return true;
+            },
             bootstrap: function () {
-                win.zucker.options.beforeLoad();
-                win.zucker.core.install();
+                if (win.zucker.core.check()) {
+                    win.zucker.options.beforeLoad();
+                    win.zucker.core.install();
+                }
             }
         },
         options: {
             componentFolder: 'archives',
             base: 'base',
             selectedProjectIndex: 0,
+            isCacheEnabled: true,
             beforeLoad: function () {},
             afterLoaded: function () {},
+            locale: 'en',
+            messages: {en: {localStorageErrorMsg: 'The local storage wasn\'t supported on your browser. The caching feature in ZuckerJS won\'t work anymore because ZuckerJS uses local storage to cache all components.'}},
             components: [],
             rootElementName: 'zucker',
             entryPointArgs: null
