@@ -242,6 +242,7 @@
             beforeLoad: function () {},
             afterLoaded: function () {},
             locale: 'en',
+            version: 'v0.1.0 beta',
             messages: {en: {localStorageErrorMsg: 'The local storage wasn\'t supported on your browser. The caching feature in ZuckerJS won\'t work anymore because ZuckerJS uses local storage to cache all components.'}},
             components: [],
             rootElementName: 'zucker',
