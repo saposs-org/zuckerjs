@@ -8,7 +8,7 @@ ZuckerJS is a simple JavaScript library which was given birth to assist any web 
 Basically, ZuckerJS relies on some configurations from you to specify what components will be loaded. All of them will be loaded into memory. When user requests a page, ZuckerJS will get location's hash of current window to specify what page will be loaded(in theory). In practice, all components, that have that same route/hash, will be executed to render page dynamically.
 
 ZuckerJS's concept:
-> Hide the complexity and creating SPA web application by writing or reusing components. Then, ZuckerJS loads them and render web page based upon user's requests.
+> Hiding the complexity and creating SPA web application by writing or reusing components(view, handler and service components). Then, ZuckerJS loads them and render web page based upon user's requests.
 
 NOTE: this term "component-oriented architecture" can be understood as a set of all uncoupled components to form an application.
 </p>
