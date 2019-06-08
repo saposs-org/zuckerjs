@@ -16,9 +16,6 @@
     <script>
         window.zucker.setAppName('todo').config(['todo.config.service', 'todo.controller.service', 'todo.layout.view', 'todo.view'])
             .setEntryPointArgs(angular)
-            .before(function () {
-                window.zucker.options.isCacheEnabled = true;
-            })
             .after(function () {
                  angular.bootstrap(document.getElementById('app'), ['todo-app']);
             })
