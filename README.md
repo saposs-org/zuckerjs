@@ -1,4 +1,4 @@
-# ZuckerJS
+# ZuckerJS - A new way to build SPA web application.
 
 <p align="justify">
 ZuckerJS is a simple JavaScript library which was given birth to assist any web developer to build any SPA web application by component-oriented architecture(uncoupled components: view, handler and service). It's free, fast, efficient and no required dependencies.
