@@ -36,7 +36,7 @@ You can find two samples from source: simple and todo(played with AngularJS).
 ## Benefits
 
 - Simple, fast and efficient.
-- Component-oriented architecture.
+- Component-oriented architecture(**all uncoupled components**).
 - SPA + cache.
 - Multiple layouts.
 - Easy to test.
